@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Shop Project</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <!-- Marker Cluster CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"
+    />
+
+    <!-- Leaflet JavaScript code -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <!-- Marker Cluster JavaScript -->
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- Font Awesome -->
+    <script
+      src="https://kit.fontawesome.com/1594df2c90.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Plotly JS -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <link rel="icon" href="img/favicon.png" type="image/png" />
+  </head>
+  <body>
+    <div
+      class="p-5 text-center bg-image"
+      style="
+        background-image: url('img/sockets.jpg');
+        height: 100vh;
+        background-size: cover;
+      "
+    >
+      <div class="mask" style="background-color: rgba(0, 0, 0, 0.7)">
+        <div class="d-flex p-5 justify-content-center align-items-center h-100">
+          <div class="text-white">
+            <h1 class="mb-3">Shop Project</h1>
+            <h5 class="mb-4">
+              Competition and Economic Information by Locations
+            </h5>
+
+            <!-- Button trigger modal -->
+            <button
+              type="button"
+              id="modalBtn"
+              class="btn btn-outline-light btn-lg m-2"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop1"
+            >
+              Map of Locations
+            </button>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="staticBackdrop1"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="staticBackdropLabel1"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="staticBackdropLabel1"
+                      style="color: black"
+                    >
+                      Map of Locations
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="map"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Button trigger modal -->
+            <button
+              type="button"
+              id="modalBtn2"
+              class="btn btn-outline-light btn-lg m-2"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop2"
+            >
+              Data Visualizations
+            </button>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="staticBackdrop2"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="staticBackdropLabel2"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="staticBackdropLabel2"
+                      style="color: black"
+                    >
+                      Data Visualizations
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="bar-graph"></div>
+                    <div id="pie-chart"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline-light btn-lg m-2 apiLink"
+              id="button"
+              href="#"
+              role="button"
+              >API Links</a
+            >
+            <div class="apiInfo mt-3">
+              <!-- Tab links - courtesy of w3schools-->
+              <div class="tab">
+                <button class="tablinks" onclick="openCat(event, 'all')">
+                  All Locations
+                </button>
+                <button class="tablinks" onclick="openCat(event, 'byCat')">
+                  Locations By Category
+                </button>
+                <button class="tablinks" onclick="openCat(event, 'economic')">
+                  Income Data
+                </button>
+              </div>
+
+              <!-- Tab content -->
+              <div style="text-align: left" id="all" class="tabcontent">
+                <h3>All Locations</h3>
+                <hr />
+                <h5>
+                  Access all restaurant and supermarket locations from the
+                  dataset
+                </h5>
+                <p>
+                  <a href="/api/v1.0/all_locations" target="_blank">/all</a>
+                </p>
+              </div>
+              <div style="text-align: left" id="byCat" class="tabcontent">
+                <h3>Locations By Category</h3>
+                <hr />
+                <h5>Access locations by category</h5>
+                <p>
+                  Categories:
+                  <a href="/api/v1.0/restaurants" target="_blank"
+                    >Restaurants only</a
+                  >,
+                  <a href="/api/v1.0/fast_food" target="_blank"
+                    >Fast food only</a
+                  >,
+                  <a href="/api/v1.0/supermarkets" target="_blank"
+                    >Supermarkets</a
+                  >
+                </p>
+              </div>
+              <div style="text-align: left" id="economic" class="tabcontent">
+                <h3>Income Data</h3>
+                <hr />
+                <h5>Access income data by zipcode</h5>
+                <p>
+                  <a href="/api/v1.0/income_data" target="_blank"
+                    >/Income data</a
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer id="foot">
+        Photo by
+        <a
+          href="https://unsplash.com/@tekton_tools?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+          >Tekton</a
+        >
+        on
+        <a
+          href="https://unsplash.com/photos/yellow-textile-on-red-and-black-plastic-crate-e6Wr8LaH-Q8?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+          >Unsplash</a
+        >
+      </footer>
+    </div>
+    <!-- jQuery  -->
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Custom JS -->
+    <script src="js/scripts.js"></script>
+    <!-- D3 Library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Map and Plotly JS files -->
+    <script src="js/map.js"></script>
+    <script src="js/plotly.js"></script>
+  </body>
+</html>
